@@ -18,7 +18,7 @@ from src.document_compare.document_comparator import DocumentComparaorLLM
 from src.document_chat.retrieval import ConversationalRAG
 from pathlib import Path
 
-
+from utils.document_ops import FastAPIFileAdaptor, read_pdf_via_handler
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent  # project root
@@ -57,21 +57,9 @@ def health_check() -> Dict[str, str]:
     return {"status": "ok", "service": "Document Portal API"}
 
 
-class FastAPIFileAdaptor:
-    def __init__(self, upload_file: UploadFile):
-        self._upload_file = upload_file
-        self.name = upload_file.filename
 
-    def getbuffer(self) -> bytes:
-        return self._upload_file.file.read()
 
-def _read_pdf_via_handler(handler: DocHandler, path:str) -> str:
-    if hasattr(handler, "read_pdf"):
-        return handler.read_pdf(path)
-    if hasattr(handler, "read_"):
-        return handler.read_(path)
-    
-    raise RuntimeError("No valid read method found in DocHandler")
+
 
 
 @app.post("/analyze-document")
@@ -81,7 +69,7 @@ async def analyze_document(file:UploadFile=File(...)) -> Any:
         dh = DocHandler()
         print("DocHandler initialized", type(file))
         saved_path = dh.save_pdf(FastAPIFileAdaptor(file))
-        text = _read_pdf_via_handler(dh, saved_path)
+        text = read_pdf_via_handler(dh, saved_path)
         analyzer = DocumentAnalyzer()
         response = analyzer.analyze_document(text)
         return JSONResponse(content={"analysis": response})
