@@ -1,0 +1,15 @@
+document_portal.egg-info
+.env
+
+__pycache__/
+*.pyc
+
+
+doc_portal_env/
+data_archive/
+archive_logs/
+logs/
+data/
+faiss_index/
+*.Identifier
+
