@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+doc_portal_env/
+.git
+.gitignore
+*.log
+logs/

@@ -1,0 +1,60 @@
+{
+    "family": "documentportaltd",
+    "networkMode": "awsvpc",
+    "executionRoleArn": "",  // ADD YOUR AWS ARN
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "1024",
+    "memory": "8192",
+    "containerDefinations": [
+        {
+            "name": "document-portal-container",
+            "image": "",      // ADD YOUR AWS IMAGE APP
+            "cpu": 1024,
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "name": "document-portal-container-8080-tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "LANGCHAIN_PROJECT",
+                    "value": "DOCUMENT PORTAL"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "GROQ_API_KEY",
+                    "valueFrom": ""
+                },
+                {
+                "name": "HF_TOKEN",
+                "valueFrom": ""
+                },
+                {
+                "name": "GOOGLE_API_KEY",
+                "valueFrom": ""
+                },
+                {
+                "name": "LANGCHAIN_API_KEY",
+                "valueFrom": ""
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/documentportaltd",
+                    "awslogs-region": "",
+                    "awslogs-stream-prefix": "ecs",
+                    "awslogs-create-group": "false",
+                    "mode": "non-blocking",
+                    "max-buffer-size": "25m"
+                }
+            }
+        }
+    ]
+}
